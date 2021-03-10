@@ -27,3 +27,8 @@ Route::get('/hellohello', function () {
 });
 
 Route::get('/hello','App\Http\Controllers\myController@index');
+Route::get('/addproduct','App\Http\Controllers\myController@showproductform');
+
+Route::post('/storeproduct','App\Http\Controllers\myController@store')->name('storeproduct');
+// showdata
+Route::get('/showproduct','App\Http\Controllers\myController@show')->name('showproduct');

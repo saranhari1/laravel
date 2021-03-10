@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use App\models\Product;
 class myController extends Controller
 {
     /**
@@ -21,10 +21,14 @@ class myController extends Controller
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
+
      */
+    public function showproductform(){
+        return view ('addproduct');
+    }
     public function create()
     {
-        //
+        
     }
 
     /**
@@ -35,7 +39,26 @@ class myController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $image=null;
+        if($request->hasFile('image')){
+            $file=$request->file('image');
+            $image=mt_rand(10001,9999999)."_".$file->getClientOriginalName();
+            $file->move('uploads/products/',$image);
+            Product::create([
+                'product_name'=>$request->get('pname'),
+                'product_price'=>$request->get('price'),
+                'product_quantity'=>$request->get('quantity'),
+                'product_description'=>$request->get('description'),
+                'product_image'=>$image
+
+
+
+            ]);
+
+            $request->session()->flash('msg','product has been addded successfully');
+            return redirect()->back();
+        }
+        
     }
 
     /**
@@ -44,9 +67,10 @@ class myController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show()
     {
-        //
+        $showdata=Product::orderBy('id','desc')->get();
+        return view ('showproduct',['showdata'=>$showdata]);
     }
 
     /**
